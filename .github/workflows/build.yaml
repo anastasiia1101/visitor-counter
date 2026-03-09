@@ -33,8 +33,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: test
-    env:
-      IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
 
     steps:
     - name: Checkout repository
@@ -51,5 +49,6 @@ jobs:
 
     - name: Build and push image
       run: |
-        docker build -t $IMAGE:latest ./app
-        docker push $IMAGE:latest
+        IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+        docker build -t "$IMAGE:latest" ./app
+        docker push "$IMAGE:latest"
