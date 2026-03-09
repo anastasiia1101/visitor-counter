@@ -2,10 +2,16 @@ version: "3.9"
 
 services:
   web:
-    build: .
+    build: ./app
     container_name: visitor-web
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:////data/visitors.db
     volumes:
-      - ./app:/app
+      - ./app/src:/app/app
+      - visitor-data:/data
     restart: unless-stopped
+
+volumes:
+  visitor-data:

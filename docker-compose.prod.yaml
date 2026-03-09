@@ -5,6 +5,10 @@ services:
   web:
     image: ghcr.io/anastasiia1101/visitor-counter:latest
     <<: *app
+    environment:
+      - DATABASE_URL=sqlite:////data/visitors.db
+    volumes:
+      - visitor-data:/data
     labels:
       # Обязательно включить Traefik
       - "traefik.enable=true"
@@ -32,3 +36,6 @@ services:
 networks:
   traefik-net:
     external: true
+
+volumes:
+  visitor-data:
