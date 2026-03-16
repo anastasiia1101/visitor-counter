@@ -151,7 +151,8 @@
           throw new Error(`HTTP ${response.status}`);
         }
 
-        statusNode.textContent = `Выбор "${gradeName}" сохранен.`;
+        statusNode.textContent = `Выбор "${gradeName}" сохранен. Перехожу на страницу...`;
+        window.location.href = `/class-pages/${encodeURIComponent(gradeName)}`;
       } catch (error) {
         console.error("Ошибка при сохранении выбора:", error);
         statusNode.textContent = `Не удалось сохранить выбор "${gradeName}".`;

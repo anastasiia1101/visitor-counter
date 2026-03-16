@@ -257,9 +257,78 @@ def render_grade_detail_page(grade_name: str, grade_clicks: list[GradeClick]) ->
 </html>"""
 
 
+def render_not_found_page(grade_name: str) -> str:
+    return f"""<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ошибка 404</title>
+  <style>
+    body {{
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at top, #fff1df 0%, #f3f7ff 55%, #e6edf9 100%);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: #1f2937;
+    }}
+    .card {{
+      max-width: 720px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 22px;
+      padding: 36px;
+      box-shadow: 0 20px 44px rgba(34, 54, 84, 0.14);
+      text-align: center;
+    }}
+    .code {{
+      font-size: 68px;
+      line-height: 1;
+      margin: 0 0 12px;
+      color: #9f5314;
+      font-weight: 800;
+    }}
+    h1 {{
+      margin: 0 0 12px;
+      font-size: 32px;
+    }}
+    p {{
+      margin: 0 0 14px;
+      color: #5b6472;
+      font-size: 18px;
+    }}
+    a {{
+      color: #9f5314;
+      text-decoration: none;
+      font-weight: 700;
+    }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="code">404</div>
+    <h1>Страница не найдена</h1>
+    <p>Для класса {escape(grade_name)} отдельная страница сейчас недоступна.</p>
+    <p>Нажатие сохранено в статистике, но запрошенный раздел отсутствует.</p>
+    <a href="/">Вернуться на главную</a>
+  </div>
+</body>
+</html>"""
+
+
 @app.get("/")
 def get_index():
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/class-pages/{grade_name}", response_class=HTMLResponse)
+def get_grade_not_found_page(grade_name: str):
+    normalized_grade_name = validate_grade_name(grade_name)
+    return HTMLResponse(render_not_found_page(normalized_grade_name), status_code=404)
 
 
 @app.post("/visit", response_model=VisitResponse)
